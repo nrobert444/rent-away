@@ -4,11 +4,20 @@ import { Link } from 'react-router-dom'
 
 class Navbar extends Component {
   render() {
+    let navColor = 'transparent'
+
+    if (this.props.location.pathname !== '/') {
+      navColor = 'black'
+    }
+
     return (
       <div className='container-fluid nav'>
         <div className='row'>
-          <nav>
+          <nav className={navColor}>
             <div className='nav-wrapper'>
+              <Link to='/' className='left'>
+                Rent-Away
+              </Link>
               <ul id='nav-mobile' className='right'>
                 <li>
                   <Link to='/'>Englsh (US)</Link>
