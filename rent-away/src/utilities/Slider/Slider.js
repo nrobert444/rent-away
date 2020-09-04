@@ -3,7 +3,7 @@ import './slider.css'
 class Slider extends Component {
   render() {
     return (
-      <div>
+      <div className='slider'>
         <h1>slider</h1>
       </div>
     )

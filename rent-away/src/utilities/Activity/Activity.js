@@ -4,7 +4,7 @@ import './Activity.css'
 class Activity extends Component {
   render() {
     return (
-      <div>
+      <div className='activity'>
         <h1>activity</h1>
       </div>
     )

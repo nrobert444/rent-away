@@ -4,7 +4,7 @@ import './Spinner.css'
 class Spinner extends Component {
   render() {
     return (
-      <div>
+      <div className='spinner'>
         <h1>spinner</h1>
       </div>
     )

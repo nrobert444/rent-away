@@ -4,7 +4,7 @@ import './City.css'
 class City extends Component {
   render() {
     return (
-      <div>
+      <div className='city'>
         <h1>city</h1>
       </div>
     )
