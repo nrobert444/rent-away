@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './Home.css'
 import SearchBox from './SearchBox'
 import Spinner from '../../utilities/Spinner/Spinner'
+import Cities from '../../utilities/City/Cities'
 import axios from 'axios'
 
 class Home extends Component {
@@ -16,7 +17,7 @@ class Home extends Component {
     this.setState({ cities: recommendedCities.data })
   }
   render() {
-    if (this.state.cities.lenght === 0) {
+    if (this.state.cities.length === 0) {
       return <Spinner />
     }
 
@@ -27,6 +28,9 @@ class Home extends Component {
             <div className='upper-fold'>
               <SearchBox />
             </div>
+          </div>
+          <div className='col s12'>
+            <Cities cities={this.state.cities} />
           </div>
         </div>
       </div>
