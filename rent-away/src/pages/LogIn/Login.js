@@ -3,8 +3,10 @@ import './Login.css'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
+import regAction from '../../actions/regAction'
 import SignUp from './SignUp'
-// import axios from 'axios'
+import axios from 'axios'
+import swal from 'sweetalert'
 
 class Login extends Component {
   state = {
@@ -20,10 +22,37 @@ class Login extends Component {
     this.setState({ password: e.target.value })
   }
 
-  submitLogin = e => {
+  submitLogin = async e => {
     e.preventDefault()
-    console.log(this.state.email)
-    console.log(this.state.password)
+    const loginUrl = `${window.apiHost}/users/login`
+    const data = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    const resp = await axios.post(loginUrl, data)
+    const token = resp.data.token
+    console.log(token)
+    console.log(resp.data)
+
+    if (resp.data.msg === 'badPass') {
+      swal({
+        title: 'Invalid password',
+        text: 'Please submit a valid password',
+        icon: 'error'
+      })
+    } else if (resp.data.msg === 'noEmail') {
+      swal({
+        title: 'No Email',
+        text: 'Please provide an email to login',
+        icon: 'error'
+      })
+    } else if (resp.data.msg === 'loggedIn') {
+      swal({
+        title: 'Success',
+        icon: 'success'
+      })
+      this.props.regAction(resp.data)
+    }
   }
 
   render() {
@@ -70,7 +99,8 @@ class Login extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      openModal: openModal
+      openModal: openModal,
+      regAction: regAction
     },
     dispatch
   )
