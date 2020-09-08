@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
 import Login from '../LogIn/Login'
+import moment from 'moment'
+import swal from 'sweetalert'
 
 class SingleFullVenue extends Component {
   state = {
@@ -44,7 +46,27 @@ class SingleFullVenue extends Component {
   }
 
   reserveNow = e => {
-    console.log('User wants to reserve')
+    const startDayMoment = moment(this.state.checkIn)
+    const endDayMoment = moment(this.state.checkOut)
+    const diffDays = endDayMoment.diff(startDayMoment, 'days')
+    if (diffDays < 1) {
+      swal({
+        title: 'bad date range',
+        text: 'Invalid date range. Please choose different dates',
+        icon: 'error'
+      })
+    } else if (isNaN(diffDays)) {
+      swal({
+        title: 'Date is not a valid number',
+        icon: 'error'
+      })
+    } else {
+      const pricePerNight = this.state.singleVenue.pricePerNight
+      // const totalPrice = pricePerNight * diffDays
+      // const scriptUrl = `https://js.stripe.com/v3`
+      // const stripePublicKey =
+      //   'pk_test_5198HtPL5CfCPYJ3X8TTrO06ChWxotTw6Sm2el4WkYdrfN5Rh7vEuVguXyPrTezvm3ntblRX8TpjAHeMQfHkEpTA600waD2fMrT'
+    }
   }
   render() {
     const sv = this.state.singleVenue
