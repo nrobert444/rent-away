@@ -12,7 +12,7 @@ import rootReducer from './reducers/rootReducer'
 
 // redux persist setup
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib.storage'
+import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react'
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2'
 
@@ -28,7 +28,7 @@ const persistor = persistStore(store)
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate persistor={persistor} loading={spinner}>
+    <PersistGate persistor={persistor} loading={Spinner}>
       <App />
     </PersistGate>
   </Provider>,

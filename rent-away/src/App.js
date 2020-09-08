@@ -5,6 +5,7 @@ import Navbar from './utilities/Navbar/Navbar'
 import './App.css'
 import SingleFullVenue from './pages/SingleFullVenue/SingleFullVenue'
 import Modal from './utilities/Modal/Modal'
+import CityVenues from './pages/CityVenues/CityVenues'
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         <Route path='/' component={Navbar} />
         <Route exact path='/' component={Home} />
         <Route exact path='/venue/:vid' component={SingleFullVenue} />
+        <Route exact path='/city/:cityName' component={CityVenues} />
         <Route path='/' component={Modal} />
       </Router>
     )
