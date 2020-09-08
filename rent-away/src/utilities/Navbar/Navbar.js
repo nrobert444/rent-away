@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-// import siteModal from '../../reducers/siteModal'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
+import Login from '../../pages/LogIn/Login'
+import SignUp from '../../pages/LogIn/SignUp'
 
 class Navbar extends Component {
   render() {
@@ -34,13 +35,16 @@ class Navbar extends Component {
                   {' '}
                   <Link to='/'>Become a Host</Link>
                 </li>
-                <li>
-                  {' '}
-                  <Link to='/'>Sign Up</Link>
+                <li
+                  onClick={() => {
+                    this.props.openModal('open', <SignUp />)
+                  }}
+                >
+                  Sign Up
                 </li>
                 <li
                   onClick={() => {
-                    this.props.openModal('open', 'Log In')
+                    this.props.openModal('open', <Login />)
                   }}
                 >
                   Log In

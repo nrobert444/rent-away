@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
 import './Login.css'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import openModal from '../../actions/openModal'
+import SignUp from './SignUp'
+
 class Login extends Component {
   render() {
     return (
@@ -23,11 +28,34 @@ class Login extends Component {
           />
           <button className='sign-up-button'>Login</button>
           <div className='divider'></div>
-          <div>Don't have an account? Sign up</div>
+          <div>
+            Don't have an account?
+            <span
+              onClick={() => {
+                this.props.openModal(
+                  'open',
+
+                  <SignUp />
+                )
+              }}
+            >
+              {' '}
+              Sign Up
+            </span>
+          </div>
         </form>
       </div>
     )
   }
 }
 
-export default Login
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      openModal: openModal
+    },
+    dispatch
+  )
+}
+
+export default connect(null, mapDispatchToProps)(Login)
