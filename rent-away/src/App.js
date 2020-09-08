@@ -4,6 +4,7 @@ import Home from './pages/Home/Home'
 import Navbar from './utilities/Navbar/Navbar'
 import './App.css'
 import SingleFullVenue from './pages/SingleFullVenue/SingleFullVenue'
+import Modal from './utilities/Modal/Modal'
 
 class App extends Component {
   render() {
@@ -11,7 +12,8 @@ class App extends Component {
       <Router>
         <Route path='/' component={Navbar} />
         <Route exact path='/' component={Home} />
-        <Route path='/venue/:vid' component={SingleFullVenue} />
+        <Route exact path='/venue/:vid' component={SingleFullVenue} />
+        <Route path='/' component={Modal} />
       </Router>
     )
   }

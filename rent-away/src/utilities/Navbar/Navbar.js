@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+// import siteModal from '../../reducers/siteModal'
+import { bindActionCreators } from 'redux'
+import openModal from '../../actions/openModal'
 
 class Navbar extends Component {
   render() {
@@ -34,9 +38,12 @@ class Navbar extends Component {
                   {' '}
                   <Link to='/'>Sign Up</Link>
                 </li>
-                <li>
-                  {' '}
-                  <Link to='/'>Log In</Link>
+                <li
+                  onClick={() => {
+                    this.props.openModal('open', 'Log In')
+                  }}
+                >
+                  Log In
                 </li>
               </ul>
             </div>
@@ -46,4 +53,14 @@ class Navbar extends Component {
     )
   }
 }
-export default Navbar
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      openModal: openModal
+    },
+    dispatch
+  )
+}
+
+export default connect(null, mapDispatchToProps)(Navbar)
