@@ -4,8 +4,28 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
 import SignUp from './SignUp'
+// import axios from 'axios'
 
 class Login extends Component {
+  state = {
+    email: '',
+    password: ''
+  }
+
+  emailSignIn = e => {
+    this.setState({ email: e.target.value })
+  }
+
+  passwordSignIn = e => {
+    this.setState({ password: e.target.value })
+  }
+
+  submitLogin = e => {
+    e.preventDefault()
+    console.log(this.state.email)
+    console.log(this.state.password)
+  }
+
   render() {
     return (
       <div className='login-form'>
@@ -20,26 +40,24 @@ class Login extends Component {
             type='text'
             className='browser-default'
             placeholder='Email address'
+            onChange={this.emailSignIn}
           />
           <input
             type='password'
             className='browser-default'
             placeholder='Password'
+            onChange={this.passwordSignIn}
           />
           <button className='sign-up-button'>Login</button>
           <div className='divider'></div>
           <div>
             Don't have an account?
             <span
+              className='pointer'
               onClick={() => {
-                this.props.openModal(
-                  'open',
-
-                  <SignUp />
-                )
+                this.props.openModal('open', <SignUp />)
               }}
             >
-              {' '}
               Sign Up
             </span>
           </div>

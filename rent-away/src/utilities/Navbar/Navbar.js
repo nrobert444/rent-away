@@ -36,6 +36,7 @@ class Navbar extends Component {
                   <Link to='/'>Become a Host</Link>
                 </li>
                 <li
+                  className='login-signup'
                   onClick={() => {
                     this.props.openModal('open', <SignUp />)
                   }}
@@ -43,6 +44,7 @@ class Navbar extends Component {
                   Sign Up
                 </li>
                 <li
+                  className='login-signup'
                   onClick={() => {
                     this.props.openModal('open', <Login />)
                   }}

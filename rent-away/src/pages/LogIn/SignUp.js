@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import Login from './Login'
+import './Login.css'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
+import axios from 'axios'
+import swal from 'sweetalert'
 
 class SignUp extends Component {
   constructor() {
@@ -18,7 +21,8 @@ class SignUp extends Component {
         </button>
       ),
       password: '',
-      email: ''
+      email: '',
+      user: {}
     }
   }
 
@@ -29,10 +33,38 @@ class SignUp extends Component {
     this.setState({ password: e.target.value })
   }
 
-  submitLogin = e => {
+  submitLogin = async e => {
     e.preventDefault()
-    console.log(this.state.email)
-    console.log(this.state.password)
+
+    const signUpUrl = `${window.apiHost}/users/signup`
+    const data = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    const resp = await axios.post(signUpUrl, data)
+    const token = resp.data.token
+    console.log(token)
+    console.log(resp.data)
+
+    if (resp.data.msg === 'userExists') {
+      swal({
+        title: 'Email Exists',
+        text: 'Email already created. Please use a different email',
+        icon: 'error'
+      })
+    } else if (resp.data.msg === 'userAdded') {
+      swal({
+        title: 'Success!',
+        icon: 'success'
+      })
+    } else if (resp.data.msg === 'invalidData') {
+      swal({
+        title: 'Invalid Email/Password',
+        text: 'Please provide a valid email and password',
+        icon: 'error',
+        dangerMode: true
+      })
+    }
   }
 
   showInputs = () => {
@@ -62,15 +94,11 @@ class SignUp extends Component {
             <div>
               Don't have an account?
               <span
+                className='pointer'
                 onClick={() => {
-                  this.props.openModal(
-                    'open',
-
-                    <Login />
-                  )
+                  this.props.openModal('open', <Login />)
                 }}
               >
-                {' '}
                 Log In
               </span>
             </div>
