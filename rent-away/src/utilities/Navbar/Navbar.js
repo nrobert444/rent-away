@@ -4,10 +4,17 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
+import logoutAction from '../../actions/logoutAction'
 import Login from '../../pages/LogIn/Login'
 import SignUp from '../../pages/LogIn/SignUp'
 
 class Navbar extends Component {
+  componentDidUpdate(oldProps) {
+    if (oldProps.auth.token !== this.props.auth.token) {
+      this.props.openModal('closed', '')
+    }
+  }
+
   render() {
     let navColor = 'transparent'
 
@@ -35,22 +42,31 @@ class Navbar extends Component {
                   {' '}
                   <Link to='/'>Become a Host</Link>
                 </li>
-                <li
-                  className='login-signup'
-                  onClick={() => {
-                    this.props.openModal('open', <SignUp />)
-                  }}
-                >
-                  Sign Up
-                </li>
-                <li
-                  className='login-signup'
-                  onClick={() => {
-                    this.props.openModal('open', <Login />)
-                  }}
-                >
-                  Log In
-                </li>
+                {this.props.auth.email ? (
+                  <>
+                    <li>Hello, {this.props.auth.email}</li>
+                    <li onClick={() => this.props.logoutAction()}>Logout</li>
+                  </>
+                ) : (
+                  <>
+                    <li
+                      className='login-signup'
+                      onClick={() => {
+                        this.props.openModal('open', <SignUp />)
+                      }}
+                    >
+                      Sign Up
+                    </li>
+                    <li
+                      className='login-signup'
+                      onClick={() => {
+                        this.props.openModal('open', <Login />)
+                      }}
+                    >
+                      Log In
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </nav>
@@ -63,10 +79,17 @@ class Navbar extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      openModal: openModal
+      openModal: openModal,
+      logoutAction: logoutAction
     },
     dispatch
   )
 }
 
-export default connect(null, mapDispatchToProps)(Navbar)
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import openModal from '../../actions/openModal'
 import axios from 'axios'
 import swal from 'sweetalert'
+import regAction from '../../actions/regAction'
 
 class SignUp extends Component {
   constructor() {
@@ -57,6 +58,7 @@ class SignUp extends Component {
         title: 'Success!',
         icon: 'success'
       })
+      this.props.regAction(resp.data)
     } else if (resp.data.msg === 'invalidData') {
       swal({
         title: 'Invalid Email/Password',
@@ -78,6 +80,7 @@ class SignUp extends Component {
     })
   }
   render() {
+    console.log(this.props.auth)
     return (
       <div className='login-form'>
         <form onSubmit={this.submitLogin}>
@@ -112,13 +115,19 @@ class SignUp extends Component {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      openModal: openModal
+      openModal: openModal,
+      regAction: regAction
     },
     dispatch
   )
 }
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
 
-export default connect(null, mapDispatchToProps)(SignUp)
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
 
 const SignUpInputFields = props => {
   return (
