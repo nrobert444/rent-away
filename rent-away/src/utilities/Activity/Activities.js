@@ -4,7 +4,6 @@ import './Activity.css'
 
 class Activities extends Component {
   render() {
-
     const activities = this.props.activities.map((activity, index) => {
       return (
         <div key={index} className='col s2'>
@@ -12,7 +11,12 @@ class Activities extends Component {
         </div>
       )
     })
-    return <div className='activities'>{activities}</div>
+    return (
+      <div className='activities'>
+        <h1 className='home-search-box'>{this.props.header}</h1>
+        {activities}
+      </div>
+    )
   }
 }
 export default Activities

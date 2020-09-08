@@ -4,6 +4,7 @@ import SearchBox from './SearchBox'
 import Activities from '../../utilities/Activity/Activities'
 import Spinner from '../../utilities/Spinner/Spinner'
 import Cities from '../../utilities/City/Cities'
+import Venues from '../../utilities/Venues/Venues'
 import axios from 'axios'
 
 class Home extends Component {
@@ -14,7 +15,8 @@ class Home extends Component {
     asiaCities: {},
     usCities: {},
     exoticCities: {},
-    activities: []
+    activities: [],
+    recVenues: {}
   }
 
   async componentDidMount() {
@@ -55,9 +57,15 @@ class Home extends Component {
     this.setState({
       activities: activities.data
     })
+    const recVenuesURL = `${window.apiHost}/venues/recommended`
+    const venues = await axios.get(recVenuesURL)
+    this.setState({
+      recVenues: venues.data
+    })
   }
+
   render() {
-    if (this.state.cities.length === 0) {
+    if (this.state.cities.length === 0 || !this.state.recVenues.venues) {
       return <Spinner />
     }
 
@@ -81,37 +89,46 @@ class Home extends Component {
               />
             </div>
             <div className='col s12'>
-              <Activities activities={this.state.activities} />
-            </div>
-            <div className='col s12'>
-              <Cities
-                cities={this.state.europeCities.cities}
-                header={this.state.europeCities.header}
+              <Activities
+                activities={this.state.activities}
+                header='Today in Your Area'
               />
-            </div>
-            <div className='col s12'>
-              <Cities
-                cities={this.state.beachCities.cities}
-                header={this.state.beachCities.header}
-              />
-            </div>
-            <div className='col s12'>
-              <Cities
-                cities={this.state.asiaCities.cities}
-                header={this.state.asiaCities.header}
-              />
-            </div>
-            <div className='col s12'>
-              <Cities
-                cities={this.state.usCities.cities}
-                header={this.state.usCities.header}
-              />
-            </div>
-            <div className='col s12'>
-              <Cities
-                cities={this.state.exoticCities.cities}
-                header={this.state.exoticCities.header}
-              />
+              <div className='col s12'>
+                <Venues
+                  venues={this.state.recVenues.venues}
+                  header={this.state.recVenues.header}
+                />
+              </div>
+              <div className='col s12'>
+                <Cities
+                  cities={this.state.europeCities.cities}
+                  header={this.state.europeCities.header}
+                />
+              </div>
+              {/* <div className='col s12'>
+                <Cities
+                  cities={this.state.beachCities.cities}
+                  header={this.state.beachCities.header}
+                />
+              </div> */}
+              <div className='col s12'>
+                <Cities
+                  cities={this.state.asiaCities.cities}
+                  header={this.state.asiaCities.header}
+                />
+              </div>
+              <div className='col s12'>
+                <Cities
+                  cities={this.state.usCities.cities}
+                  header={this.state.usCities.header}
+                />
+              </div>
+              <div className='col s12'>
+                <Cities
+                  cities={this.state.exoticCities.cities}
+                  header={this.state.exoticCities.header}
+                />
+              </div>
             </div>
           </div>
         </div>
