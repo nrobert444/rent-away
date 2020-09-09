@@ -7,7 +7,6 @@ import { Route } from 'react-router-dom'
 import Bookings from './Bookings'
 import ChangePassword from './ChangePassword'
 import AccountSideBar from './AccountSideBar'
-import swal from 'sweetalert'
 
 class Account extends Component {
   state = {

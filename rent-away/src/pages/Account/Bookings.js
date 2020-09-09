@@ -1,31 +1,46 @@
 import React from 'react'
+import moment from 'moment'
 
-const Bookings = (props) => {
-  const bookings = (
-    <tr key={i} className='booking-row'>
-      <td>{booking.status}</td>
-      <td>
-        <div className='booking-detail'>{dates}</div>
-        <div className='booking-detail'>{booking.venueData.title}</div>
-        <div className='booking-detail'>{booking.venueData.location}</div>
-      </td>
-      <td>
-        <div className='booking-detail'>Confirmation #: {booking.conf}</div>
-        <div className='booking-detail'>
-          {booking.numberOfGuests} Guests, {booking.totalNights} Nights
-        </div>
-        <div className='booking-detail'>${booking.pricePerNight} per night</div>
-        <div className='booking-detail'>${booking.totalPrice} Total</div>
-      </td>
-      <td>
-        <div className='booking-detail pointer'>Print Reservation</div>
-        <div className='booking-detail pointer'>Cancel Confirmation</div>
-      </td>
-    </tr>
-  )
+const Bookings = props => {
+  const bookings = props.bookings.map((booking, index) => {
+    const dates = `${moment(booking.checkIn).format('MMM Do')} - ${moment(
+      booking.checkOut
+    ).format('MMM Do YYYY')}`
+    return (
+      <tr key={index} className='booking-row'>
+        <td>
+          {booking.status === 'confirmed' && props.type === 'past'
+            ? 'complete'
+            : booking.status}
+        </td>
+        <td>
+          <div className='booking-detail'>{dates}</div>
+          <div className='booking-detail'>{booking.venueData.title}</div>
+          <div className='booking-detail'>{booking.venueData.location}</div>
+        </td>
+        <td>
+          <div className='booking-detail'>Confirmation #: {booking.conf}</div>
+          <div className='booking-detail'>
+            {booking.numberOfGuests} Guests, {booking.totalNights} Nights
+          </div>
+          <div className='booking-detail'>
+            ${booking.pricePerNight} per night
+          </div>
+          <div className='booking-detail'>${booking.totalPrice} Total</div>
+        </td>
+        <td>
+          <div className='booking-detail pointer'>Print Reservation</div>
+          {props.type === 'upcoming' ? (
+            <div className='booking-detail pointer'>Cancel Confirmation</div>
+          ) : (
+            <> </>
+          )}
+        </td>
+      </tr>
+    )
+  })
 
   return (
-    ///////////////////////////// Return /////////////////////////////
     <table className='booking'>
       <thead>
         <tr>

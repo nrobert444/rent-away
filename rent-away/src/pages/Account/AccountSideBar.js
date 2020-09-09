@@ -9,6 +9,7 @@ const AccountSideBar = () => {
           <img
             className=''
             src='https://airbnb-clone-prexel-images.s3.amazonaws.com/genericAvatar.png'
+            alt='avatar'
           />
         </div>
       </li>
