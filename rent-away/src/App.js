@@ -22,7 +22,7 @@ class App extends Component {
           path='/payment-success/:stripeToken'
           component={PaymentSuccess}
         />
-        <Route exact path='/account' component={Account} />
+        <Route path='/account' component={Account} />
         <Route path='/' component={Modal} />
       </Router>
     )
