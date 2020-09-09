@@ -1,7 +1,35 @@
 import React from 'react'
 import moment from 'moment'
+import swal from 'sweetalert'
+import axios from 'axios'
 
 const Bookings = props => {
+  const cancelBooking = async (bid, location) => {
+    const cancelReservation = await swal({
+      text: `Are you sure you want to cancel your trip to ${location}?`,
+      icon: 'warning',
+      buttons: true
+    })
+    if (cancelReservation) {
+      const url = `${window.apiHost}/reservation/cancel`
+      const data = {
+        token: props.token,
+        bid
+      }
+      const resp = await axios.post(url, data)
+      if (resp.data.msg === 'cancelled') {
+        swal({
+          title: 'Reservation Cancelled',
+          icon: 'success'
+        })
+      } else {
+        swal({
+          title: 'There was an error cancelling',
+          icon: 'error'
+        })
+      }
+    }
+  }
   const bookings = props.bookings.map((booking, index) => {
     const dates = `${moment(booking.checkIn).format('MMM Do')} - ${moment(
       booking.checkOut
@@ -30,8 +58,15 @@ const Bookings = props => {
         </td>
         <td>
           <div className='booking-detail pointer'>Print Reservation</div>
-          {props.type === 'upcoming' ? (
-            <div className='booking-detail pointer'>Cancel Confirmation</div>
+          {props.type === 'upcoming' && booking.status !== 'cancelled' ? (
+            <div
+              onClick={() =>
+                cancelBooking(booking.id, booking.venueData.location)
+              }
+              className='booking-detail pointer'
+            >
+              Cancel Confirmation
+            </div>
           ) : (
             <> </>
           )}

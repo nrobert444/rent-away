@@ -46,7 +46,11 @@ class Account extends Component {
               render={() => <h1>Choose an option on the Left!</h1>}
             />
             <Route path='/account/reservations/confirmed'>
-              <Bookings type='upcoming' bookings={upcomingBookings} />
+              <Bookings
+                type='upcoming'
+                bookings={upcomingBookings}
+                token={this.props.auth.token}
+              />
             </Route>
             <Route path='/account/reservations/past'>
               <Bookings type='past' bookings={pastBookings} />
