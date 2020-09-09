@@ -44,7 +44,9 @@ class Navbar extends Component {
                 </li>
                 {this.props.auth.email ? (
                   <>
-                    <li>Hello, {this.props.auth.email}</li>
+                    <li>
+                      <Link to='/account'>Hello, {this.props.auth.email}</Link>
+                    </li>
                     <li onClick={() => this.props.logoutAction()}>Logout</li>
                   </>
                 ) : (
