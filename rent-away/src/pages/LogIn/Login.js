@@ -1,33 +1,23 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import './Login.css'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { useDispatch } from 'react-redux'
 import openModal from '../../actions/openModal'
 import regAction from '../../actions/regAction'
 import SignUp from './SignUp'
 import axios from 'axios'
 import swal from 'sweetalert'
 
-class Login extends Component {
-  state = {
-    email: '',
-    password: ''
-  }
+const Login = () => {
+  const dispatch = useDispatch()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  emailSignIn = e => {
-    this.setState({ email: e.target.value })
-  }
-
-  passwordSignIn = e => {
-    this.setState({ password: e.target.value })
-  }
-
-  submitLogin = async e => {
+  const submitLogin = async e => {
     e.preventDefault()
     const loginUrl = `${window.apiHost}/users/login`
     const data = {
-      email: this.state.email,
-      password: this.state.password
+      email,
+      password
     }
     const resp = await axios.post(loginUrl, data)
     const token = resp.data.token
@@ -51,59 +41,59 @@ class Login extends Component {
         title: 'Success',
         icon: 'success'
       })
-      this.props.regAction(resp.data)
+      dispatch(regAction(resp.data))
     }
   }
 
-  render() {
-    return (
-      <div className='login-form'>
-        <form onSubmit={this.submitLogin}>
-          <button className='facebook-login'>Connect With Facebook</button>
-          <button className='google-login'>Connect With Google</button>
-          <div className='login-or center'>
-            <span>or</span>
-            <div className='or-divider'></div>
-          </div>
-          <input
-            type='text'
-            className='browser-default'
-            placeholder='Email address'
-            onChange={this.emailSignIn}
-          />
-          <input
-            type='password'
-            className='browser-default'
-            placeholder='Password'
-            onChange={this.passwordSignIn}
-          />
-          <button className='sign-up-button'>Login</button>
-          <div className='divider'></div>
-          <div>
-            Don't have an account?
-            <span
-              className='pointer'
-              onClick={() => {
-                this.props.openModal('open', <SignUp />)
-              }}
-            >
-              Sign Up
-            </span>
-          </div>
-        </form>
-      </div>
-    )
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
-    {
-      openModal: openModal,
-      regAction: regAction
-    },
-    dispatch
+  return (
+    <div className='login-form'>
+      <form onSubmit={submitLogin}>
+        <button className='facebook-login'>Connect With Facebook</button>
+        <button className='google-login'>Connect With Google</button>
+        <div className='login-or center'>
+          <span>or</span>
+          <div className='or-divider'></div>
+        </div>
+        <input
+          type='text'
+          className='browser-default'
+          placeholder='Email address'
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          type='password'
+          className='browser-default'
+          placeholder='Password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button className='sign-up-button'>Login</button>
+        <div className='divider'></div>
+        <div>
+          Don't have an account?
+          <span
+            className='pointer'
+            onClick={() => {
+              dispatch(openModal('open', <SignUp />))
+            }}
+          >
+            Sign Up
+          </span>
+        </div>
+      </form>
+    </div>
   )
 }
 
-export default connect(null, mapDispatchToProps)(Login)
+// const mapDispatchToProps = dispatch => {
+//   return bindActionCreators(
+//     {
+//       openModal: openModal,
+//       regAction: regAction
+//     },
+//     dispatch
+//   )
+// }
+
+export default Login
