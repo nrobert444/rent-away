@@ -1,46 +1,32 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import Login from './Login'
 import './Login.css'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { useDispatch } from 'react-redux'
 import openModal from '../../actions/openModal'
 import axios from 'axios'
 import swal from 'sweetalert'
 import regAction from '../../actions/regAction'
 
-class SignUp extends Component {
-  constructor() {
-    super()
-    this.state = {
-      lowerPartOfForm: (
-        <button
-          type='button'
-          onClick={this.showInputs}
-          className='sign-up-button'
-        >
-          Sign up with email
-        </button>
-      ),
-      password: '',
-      email: '',
-      user: {}
-    }
-  }
+const SignUp = props => {
+  const dispatch = useDispatch()
+  const [lowerPartOfForm, setLowerPartOfForm] = useState('')
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
 
-  changeEmail = e => {
-    this.setState({ email: e.target.value })
-  }
-  changePassword = e => {
-    this.setState({ password: e.target.value })
-  }
+  useEffect(() => {
+    setLowerPartOfForm(
+      <button type='button' onClick={showInputs} className='sign-up-button'>
+        Sign up with email
+      </button>
+    )
+  }, [])
 
-  submitLogin = async e => {
+  const submitLogin = async e => {
     e.preventDefault()
-
     const signUpUrl = `${window.apiHost}/users/signup`
     const data = {
-      email: this.state.email,
-      password: this.state.password
+      email,
+      password
     }
     const resp = await axios.post(signUpUrl, data)
     const token = resp.data.token
@@ -50,7 +36,14 @@ class SignUp extends Component {
     if (resp.data.msg === 'userExists') {
       swal({
         title: 'Email Exists',
-        text: 'Email already created. Please use a different email',
+        text:
+          'The email you provided is already registered. Please try another.',
+        icon: 'error'
+      })
+    } else if (resp.data.msg === 'invalidData') {
+      swal({
+        title: 'Invalid email/password',
+        text: 'Please provide a valid email and password',
         icon: 'error'
       })
     } else if (resp.data.msg === 'userAdded') {
@@ -58,76 +51,49 @@ class SignUp extends Component {
         title: 'Success!',
         icon: 'success'
       })
-      this.props.regAction(resp.data)
-    } else if (resp.data.msg === 'invalidData') {
-      swal({
-        title: 'Invalid Email/Password',
-        text: 'Please provide a valid email and password',
-        icon: 'error',
-        dangerMode: true
-      })
     }
+    dispatch(regAction(resp.data))
   }
 
-  showInputs = () => {
-    this.setState({
-      lowerPartOfForm: (
-        <SignUpInputFields
-          changeEmail={this.changeEmail}
-          changePassword={this.changePassword}
-        />
-      )
-    })
-  }
-  render() {
-    console.log(this.props.auth)
-    return (
-      <div className='login-form'>
-        <form onSubmit={this.submitLogin}>
-          <button className='facebook-login'>Connect With Facebook</button>
-          <button className='google-login'>Connect With Google</button>
-          <div className='login-or center'>
-            <span>or</span>
-            <div className='or-divider'></div>
-          </div>
-          {this.state.lowerPartOfForm}
-          <div className='divider'></div>
-          <div>
-            Already have an account?
-            <div>
-              Don't have an account?
-              <span
-                className='pointer'
-                onClick={() => {
-                  this.props.openModal('open', <Login />)
-                }}
-              >
-                Log In
-              </span>
-            </div>
-          </div>
-        </form>
-      </div>
+  const showInputs = () => {
+    setLowerPartOfForm(
+      <SignUpInputFields
+        changeEmail={e => setEmail(e.target.value)}
+        changePassword={e => setPassword(e.target.value)}
+      />
     )
   }
-}
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators(
-    {
-      openModal: openModal,
-      regAction: regAction
-    },
-    dispatch
+  return (
+    <div className='login-form'>
+      <form onSubmit={submitLogin}>
+        <button className='facebook-login'>Connect With Facebook</button>
+        <button className='google-login'>Connect With Google</button>
+        <div className='login-or center'>
+          <span>or</span>
+          <div className='or-divider'></div>
+        </div>
+        {lowerPartOfForm}
+        <div className='divider'></div>
+        <div>
+          Already have an account?
+          <div>
+            Don't have an account?
+            <span
+              className='pointer'
+              onClick={() => {
+                dispatch(openModal('open', <Login />))
+              }}
+            >
+              Log In
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
   )
 }
-const mapStateToProps = state => {
-  return {
-    auth: state.auth
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+export default SignUp
 
 const SignUpInputFields = props => {
   return (
@@ -135,7 +101,7 @@ const SignUpInputFields = props => {
       <div className=' col m12'>
         <div className='input-field' id='email'>
           <div className='form-label'>Email</div>
-          <input type='text' placeholder='Email' onChange={props.changeEmail} />
+          <input type='text' placeholder='Email' onChange={props.setEmail} />
         </div>
       </div>
       <div className=' col m12'>
@@ -144,7 +110,7 @@ const SignUpInputFields = props => {
           <input
             type='password'
             placeholder='Password'
-            onChange={props.changePassword}
+            onChange={props.setPassword}
           />
         </div>
       </div>
