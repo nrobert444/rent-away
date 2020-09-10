@@ -24,7 +24,7 @@ const Search = props => {
       setApiResponse(true)
     }
     fetchSearchData()
-  }, [])
+  }, [props.match.params.searchTerm])
 
   if (!apiResponse) {
     return <Spinner />

@@ -1,95 +1,64 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import './SearchBox.css'
+import useControlledInput from '../../customHooks/useControlledInput'
 
-class SearchBox extends Component {
-  state = {
-    where: '',
-    checkIn: '',
-    checkOut: '',
-    guests: 0
-  }
+const SearchBox = props => {
+  const where = useControlledInput('')
+  const checkIn = useControlledInput('')
+  const checkOut = useControlledInput('')
+  const guests = useControlledInput(1)
 
-  changeWhere = e => {
-    this.setState({ where: e.target.value })
-  }
-  changeCheckIn = e => {
-    this.setState({ checkOut: e.target.value })
-  }
-  changeCheckOut = e => {
-    this.setState({ checkOut: e.target.value })
-  }
-  changeGuests = e => {
-    this.setState({ guests: e.target.value })
-  }
-
-  submitSearch = e => {
+  const submitSearch = e => {
     e.preventDefault()
-    this.props.history.push(`/search/${this.state.where}`)
+    props.history.push(`/search/${where.value}`)
   }
 
-  render() {
-    return (
-      <div className='home-search-box col m4'>
-        <h1>Book Unique places to stay and things to do.</h1>
+  return (
+    <div className='home-search-box col m4'>
+      <h1>Book Unique places to stay and things to do.</h1>
 
-        <div className='form'>
-          <form onSubmit={this.submitSearch} className='search-box-form'>
-            <div className='col m12'>
-              <div className='form-label'>Where</div>
-              <div className='input-field' id='where'>
-                <input
-                  onChange={this.changeWhere}
-                  type='text'
-                  value={this.state.where}
-                  placeholder='Anywhere'
-                ></input>
-              </div>
+      <div className='form'>
+        <form onSubmit={submitSearch} className='search-box-form'>
+          <div className='col m12'>
+            <div className='form-label'>Where</div>
+            <div className='input-field' id='where'>
+              <input type='text' {...where} placeholder='Anywhere'></input>
             </div>
-            <div className='col m6'>
-              <div className='form-label'>Check-In</div>
-              <div className='input-field' id='check-in'>
-                <input
-                  onChange={this.changeCheckIn}
-                  type='date'
-                  value={this.state.checkIn}
-                  placeholder='mm/dd/yyyy'
-                ></input>
-              </div>
+          </div>
+          <div className='col m6'>
+            <div className='form-label'>Check-In</div>
+            <div className='input-field' id='check-in'>
+              <input type='date' {...checkIn} placeholder='mm/dd/yyyy'></input>
             </div>
-            <div className='col m6'>
-              <div className='form-label'>Check-Out</div>
-              <div className='input-field' id='check-out'>
-                <input
-                  onChange={this.changeCheckOut}
-                  type='date'
-                  value={this.state.checkOut}
-                  placeholder='mm/dd/yyyy'
-                ></input>
-              </div>
+          </div>
+          <div className='col m6'>
+            <div className='form-label'>Check-Out</div>
+            <div className='input-field' id='check-out'>
+              <input type='date' {...checkOut} placeholder='mm/dd/yyyy'></input>
             </div>
-            <div className='col m12'>
-              <div className='form-label'>Guests</div>
-              <div className='input-field' id='guests'>
-                <input
-                  onChange={this.changeGuests}
-                  type='number'
-                  value={this.state.guests}
-                  placeholder='How many guests'
-                ></input>
-              </div>
+          </div>
+          <div className='col m12'>
+            <div className='form-label'>Guests</div>
+            <div className='input-field' id='guests'>
+              <input
+                type='number'
+                {...guests}
+                placeholder='How many guests'
+              ></input>
             </div>
-            <div className='col m12 submit-btn'>
-              <div className='input-field' id='submit-btn'>
-                <input
-                  type='submit'
-                  className='btn-large waves-effect waves-light red accent-2 '
-                />
-              </div>
+          </div>
+          <div className='col m12 submit-btn'>
+            <div className='input-field' id='submit-btn'>
+              <input
+                type='submit'
+                className='btn-large waves-effect waves-light red accent-2 '
+              />
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
 export default SearchBox
